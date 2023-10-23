@@ -9,10 +9,9 @@ class Book {
    * => {isbn, amazon_url, author, language, pages, publisher, title, year}
    *
    **/
-
   static async findOne(isbn) {
     const bookRes = await db.query(
-        `SELECT isbn,
+      `SELECT isbn,
                 amazon_url,
                 author,
                 language,
@@ -36,10 +35,9 @@ class Book {
    *       pages, publisher, title, year}, ... ]
    *
    * */
-
   static async findAll() {
     const booksRes = await db.query(
-        `SELECT isbn,
+      `SELECT isbn,
                 amazon_url,
                 author,
                 language,
@@ -60,7 +58,6 @@ class Book {
    * => {isbn, amazon_url, author, language, pages, publisher, title, year}
    *
    * */
-
   static async create(data) {
     const result = await db.query(
       `INSERT INTO books (
@@ -103,7 +100,6 @@ class Book {
    * => {isbn, amazon_url, author, language, pages, publisher, title, year}
    *
    * */
-
   static async update(isbn, data) {
     const result = await db.query(
       `UPDATE books SET 
@@ -143,13 +139,12 @@ class Book {
   }
 
   /** remove book with matching isbn. Returns undefined. */
-
   static async remove(isbn) {
     const result = await db.query(
       `DELETE FROM books 
          WHERE isbn = $1 
          RETURNING isbn`,
-        [isbn]);
+      [isbn]);
 
     if (result.rows.length === 0) {
       throw { message: `There is no book with an isbn '${isbn}`, status: 404 }

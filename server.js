@@ -1,9 +1,10 @@
 /** Server for bookstore. */
-
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const app = require("./app");
 
+// Start the server on port 3000
 app.listen(3000, () => {
   console.log(`Server starting on port 3000`);
 });
