@@ -1,5 +1,6 @@
 /** Server for bookstore. */
 
+require('dotenv').config();
 
 const app = require("./app");
 

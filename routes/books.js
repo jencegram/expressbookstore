@@ -1,5 +1,8 @@
+const jsonschema = require('jsonschema');
+const bookSchema = require('../schema/bookSchema.json');
 const express = require("express");
 const Book = require("../models/book");
+const ExpressError = require('../expressError');
 
 const router = new express.Router();
 
@@ -30,9 +33,26 @@ router.get("/:id", async function (req, res, next) {
 
 router.post("/", async function (req, res, next) {
   try {
+    // Validate provided data against book schema
+    const result = jsonschema.validate(req.body, bookSchema);
+
+    // If validation fails
+    if (!result.valid) {
+      // Collect all the validation errors
+      let listOfErrors = result.errors.map(error => error.stack);
+
+      // Create a new error with the messages and a 400 status code
+      let error = new ExpressError(listOfErrors, 400);
+
+      // Throw errow
+      throw error;
+    }
+
+    // If validated, create the book
     const book = await Book.create(req.body);
-    return res.status(201).json({ book });
-  } catch (err) {
+    return res.status(201).json({book});
+
+  }catch (err) {
     return next(err);
   }
 });
@@ -60,3 +80,6 @@ router.delete("/:isbn", async function (req, res, next) {
 });
 
 module.exports = router;
+
+
+
